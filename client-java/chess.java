@@ -1,6 +1,7 @@
 import java.util.Vector;
 
 public class chess {
+
 	public static void reset() {
 		// reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
 	}
@@ -22,11 +23,14 @@ public class chess {
 	}
 	
 	public static void boardSet(String strIn) {
-		// read the state of the game from the provided argument and set your internal variables accordingly - note that the state has exactly 40 or 41 characters
+		// read the state of the game from the provided argument and set your internal variables accordingly - 
+	    // note that the state has exactly 40 or 41 characters
+
 	}
 	
 	public static char winner() {
-		// determine the winner of the current state of the game and return '?' or '=' or 'W' or 'B' - note that we are returning a character and not a string
+		// determine the winner of the current state of the game and return '?' or '=' or 'W' or 'B' - 
+	    // note that we are returning a character and not a string
 		
 		return '?';
 	}
@@ -52,13 +56,15 @@ public class chess {
 	}
 	
 	public static boolean isEnemy(char charPiece) {
-		// with reference to the state of the game, return whether the provided argument is a piece from the side not on move - note that we could but should not use the other is() functions in here but probably
+		// with reference to the state of the game, return whether the provided argument is a piece from the side not on move - 
+	    //note that we could but should not use the other is() functions in here but probably
 		
 		return false;
 	}
 	
 	public static boolean isOwn(char charPiece) {
-		// with reference to the state of the game, return whether the provided argument is a piece from the side on move - note that we could but should not use the other is() functions in here but probably
+		// with reference to the state of the game, return whether the provided argument is a piece from the side on move - 
+	    //note that we could but should not use the other is() functions in here but probably
 		
 		return false;
 	}
@@ -68,6 +74,12 @@ public class chess {
 		
 		return false;
 	}
+
+
+  // **************************************************************
+  // *********************** END OF HOMEOWORK 1 *******************
+  // **************************************************************
+
 	
 	public static int eval() {
 		// with reference to the state of the game, return the the evaluation score of the side on move - note that positive means an advantage while negative means a disadvantage
