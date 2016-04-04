@@ -178,12 +178,25 @@ public class chess {
         }
 		return false;
 	}
-	
+
+	// return whether the provided argument is not a piece / is an empty field -
+	// note that we could but should not use the other is() functions in here but probably	
 	public static boolean isNothing(char charPiece) {
-		// return whether the provided argument is not a piece / is an empty field -
-	    // note that we could but should not use the other is() functions in here but probably
-		
-		return false;
+		switch(charPiece) {
+		  case 'k': return false;
+		  case 'q': return false;
+		  case 'b': return false;
+		  case 'n': return false;
+		  case 'r': return false;
+		  case 'p': return false;
+		  case 'K': return false;
+		  case 'Q': return false;
+		  case 'B': return false;
+		  case 'N': return false;
+		  case 'R': return false;
+		  case 'P': return false;
+        }
+		return true;
 	}
 
 
