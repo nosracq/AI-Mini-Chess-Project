@@ -126,23 +126,62 @@ public class chess {
 		
 		return true;
 	}
-	
+
+	// with reference to the state of the game, return whether the provided argument is a piece from the side not on move - 
+    //note that we could but should not use the other is() functions in here but probably	
 	public static boolean isEnemy(char charPiece) {
-		// with reference to the state of the game, return whether the provided argument is a piece from the side not on move - 
-	    //note that we could but should not use the other is() functions in here but probably
-		
+	    if (nextMove == 'W') {
+		  switch(charPiece) {
+		    case 'k': return true;
+		    case 'q': return true;
+		    case 'b': return true;
+		    case 'n': return true;
+		    case 'r': return true;
+		    case 'p': return true;
+          }
+        }		
+	    else if (nextMove == 'B') {
+		  switch(charPiece) {
+		    case 'K': return true;
+		    case 'Q': return true;
+		    case 'B': return true;
+		    case 'N': return true;
+		    case 'R': return true;
+		    case 'P': return true;
+          }
+        }
 		return false;
-	}
+ 	}
 	
 	public static boolean isOwn(char charPiece) {
 		// with reference to the state of the game, return whether the provided argument is a piece from the side on move - 
 	    //note that we could but should not use the other is() functions in here but probably
-		
+	    if (nextMove == 'B') {
+		  switch(charPiece) {
+		    case 'k': return true;
+		    case 'q': return true;
+		    case 'b': return true;
+		    case 'n': return true;
+		    case 'r': return true;
+		    case 'p': return true;
+          }
+        }		
+	    else if (nextMove == 'W') {
+		  switch(charPiece) {
+		    case 'K': return true;
+		    case 'Q': return true;
+		    case 'B': return true;
+		    case 'N': return true;
+		    case 'R': return true;
+		    case 'P': return true;
+          }
+        }
 		return false;
 	}
 	
 	public static boolean isNothing(char charPiece) {
-		// return whether the provided argument is not a piece / is an empty field - note that we could but should not use the other is() functions in here but probably
+		// return whether the provided argument is not a piece / is an empty field -
+	    // note that we could but should not use the other is() functions in here but probably
 		
 		return false;
 	}
