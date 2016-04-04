@@ -93,8 +93,18 @@ public class chess {
 	// determine the winner of the current state of the game and return '?' or '=' or 'W' or 'B' - 
 	// note that we are returning a character and not a string	
 	public static char winner() {
-		
-		return '?';
+	  char winner;
+	  String state = boardGet();
+	  // check if game is a draw
+	  if (playCount > 40)
+		winner = '=';
+	  // check for a winner
+	  else if (state.contains("k") && !state.contains("K")) winner = 'B';
+	  else if (!state.contains("k") && state.contains("K")) winner = 'W';
+	  // not a draw or a winner, game continues
+	  else winner = '?';
+
+	  return winner;
 	}
 	
 	public static boolean isValid(int intX, int intY) {
