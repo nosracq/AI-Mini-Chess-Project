@@ -1,36 +1,98 @@
 import java.util.Vector;
+import java.io.*;
 
 public class chess {
+    // Global variables for game state
+    static int playCount;
+    static char nextMove;
+    static char [][] board = new char[7][6];
+    public chess() { reset();}
 
+	// reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
 	public static void reset() {
-		// reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
-	}
-	
-	public static String boardGet() {
-		// return the state of the game - one example is given below - note that the state has exactly 40 or 41 characters
-		
-		String strOut = "";
-		
-		strOut += "1 W\n";
-		strOut += "kqbnr\n";
-		strOut += "ppppp\n";
-		strOut += ".....\n";
-		strOut += ".....\n";
-		strOut += "PPPPP\n";
-		strOut += "RNBQK\n";
-		
-		return strOut;
-	}
-	
-	public static void boardSet(String strIn) {
-		// read the state of the game from the provided argument and set your internal variables accordingly - 
-	    // note that the state has exactly 40 or 41 characters
+	  playCount = 1;
+	  nextMove = 'W';
+
+      board[0][0] = '1';
+      board[0][1] = ' ';
+      board[0][2] = 'W';
+      board[0][3] = '\n';
+      board[1][0] = 'k';
+      board[1][1] = 'q';
+      board[1][2] = 'b';
+      board[1][3] = 'n';
+      board[1][4] = 'r';
+      board[1][5] = '\n';
+
+      for (int i = 0; i < 5; i++)
+        board[2][i] = 'p';
+      board[2][5] = '\n';
+
+      for (int i = 0; i < 5; i++)
+        board[3][i] = '.';
+      board[3][5] = '\n';
+
+      for (int i = 0; i < 5; i++)
+        board[4][i] = '.';
+      board[4][5] = '\n';
+
+      for (int i = 0; i < 5; i++)
+        board[5][i] = 'P';
+      board[5][5] = '\n';
+
+      board[6][0] = 'R';
+      board[6][1] = 'N';
+      board[6][2] = 'B';
+      board[6][3] = 'Q';
+      board[6][4] = 'K';
+      board[6][5] = '\n';
 
 	}
-	
+
+	// return the state of the game - one example is given below - note that the state has exactly 40 or 41 characters	
+	public static String boardGet() {
+  	    StringBuilder strBuilder = new StringBuilder();
+		for(int i = 0; i < board.length; i++) {
+		  for (int j = 0; j < board[j].length; j++) {
+			strBuilder.append(board[i][j]);
+			if (board[i][j]=='\n') break;
+          }
+
+        }
+		return strBuilder.toString();
+	}
+
+	// read the state of the game from the provided argument and set your internal variables accordingly - 
+	// note that the state has exactly 40 or 41 characters	
+	public static void boardSet(String strIn) {
+	    char [] chars = strIn.toCharArray();
+		StringBuilder str = new StringBuilder(2);
+
+		int idx = 0;
+		while (idx < chars.length) {
+		  for (int i = 0; i < board.length; i++)
+     		for (int j = 0; j < board[j].length; j++) {
+			  board[i][j] = chars[idx];
+			  idx++;
+			  if (board[i][j] == '\n') break;
+			}
+        }
+		if (chars[1] == ' ') {
+		  playCount = Character.getNumericValue(chars[0]);
+		  nextMove = chars[2];
+        }
+		else {
+		  str.append(chars[0]);
+		  str.append(chars[1]);
+		  playCount = Integer.valueOf(str.toString());
+		  nextMove = chars[3];
+		}
+
+	}
+
+	// determine the winner of the current state of the game and return '?' or '=' or 'W' or 'B' - 
+	// note that we are returning a character and not a string	
 	public static char winner() {
-		// determine the winner of the current state of the game and return '?' or '=' or 'W' or 'B' - 
-	    // note that we are returning a character and not a string
 		
 		return '?';
 	}
