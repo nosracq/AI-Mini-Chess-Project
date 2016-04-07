@@ -6,6 +6,8 @@ public class chess {
     static int playCount;
     static char nextMove;
     static char [][] board = new char[7][6];
+    static Vector<String> moves = new Vector<String>();
+
     public chess() { reset();}
 
 	// reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
@@ -46,6 +48,8 @@ public class chess {
       board[6][3] = 'Q';
       board[6][4] = 'K';
       board[6][5] = '\n';
+
+	  moves.add("a2-a3\n");
 
 	}
 
@@ -95,8 +99,17 @@ public class chess {
 	public static char winner() {
 	  char winner;
 	  String state = boardGet();
+	  // check for a winner
+	  if (state.contains("k") && !state.contains("K")) winner = 'B';
+	  else if (!state.contains("k") && state.contains("K")) winner = 'W';
+	  else if (playCount > 40)
+		winner = '=';
+	  // not a draw or a winner, game continues
+	  else winner = '?';
+
+	  return winner;
 	  // check if game is a draw
-	  if (playCount > 40)
+	  /*	  if (playCount > 40)
 		winner = '=';
 	  // check for a winner
 	  else if (state.contains("k") && !state.contains("K")) winner = 'B';
@@ -104,7 +117,7 @@ public class chess {
 	  // not a draw or a winner, game continues
 	  else winner = '?';
 
-	  return winner;
+	  return winner;*/
 	}
 	
 	public static boolean isValid(int intX, int intY) {
@@ -200,19 +213,20 @@ public class chess {
 	}
 
 
-  // **************************************************************
-  // *********************** END OF HOMEOWORK 1 *******************
-  // **************************************************************
+    // **************************************************************
+    // *********************** END OF HOMEOWORK 1 *******************
+    // **************************************************************
 
-	
+	// with reference to the state of the game, return the evaluation score of the side on move - 
+    // note that positive means an advantage while negative means a disadvantage	
 	public static int eval() {
-		// with reference to the state of the game, return the the evaluation score of the side on move - note that positive means an advantage while negative means a disadvantage
 		
 		return 0;
 	}
-	
+
+	// with reference to the state of the game and return the possible moves - one example is given below - 
+    // note that a move has exactly 6 characters
 	public static Vector<String> moves() {
-		// with reference to the state of the game and return the possible moves - one example is given below - note that a move has exactly 6 characters
 		
 		Vector<String> strOut = new Vector<String>();
 		
@@ -227,22 +241,34 @@ public class chess {
 		return strOut;
 	}
 	
+	// with reference to the state of the game, determine the possible moves and shuffle them before returning them - 
+    // note that you can call the chess.moves() function in here
 	public static Vector<String> movesShuffled() {
-		// with reference to the state of the game, determine the possible moves and shuffle them before returning them - note that you can call the chess.moves() function in here
 		
 		return new Vector<String>();
 	}
 	
+	// with reference to the state of the game, determine the possible moves and sort them in order of an increasing evaluation score before returning them - 
+    // note that you can call the chess.moves() function in here
 	public static Vector<String> movesEvaluated() {
-		// with reference to the state of the game, determine the possible moves and sort them in order of an increasing evaluation score before returning them - note that you can call the chess.moves() function in here
 		
 		return new Vector<String>();
 	}
 	
+	// perform the supplied move (for example "a5-a4\n") and update the state of the game / your internal variables accordingly - 
+    // note that it advised to do a sanity check of the supplied move
 	public static void move(String charIn) {
-		// perform the supplied move (for example "a5-a4\n") and update the state of the game / your internal variables accordingly - note that it advised to do a sanity check of the supplied move
 	}
+
+
+
+
+    // **************************************************************
+    // *********************** END OF HOMEOWORK 2 *******************
+    // **************************************************************
+
 	
+
 	public static String moveRandom() {
 		// perform a random move and return it - one example output is given below - note that you can call the chess.movesShuffled() function as well as the chess.move() function in here
 		
