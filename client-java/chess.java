@@ -102,22 +102,13 @@ public class chess {
 	  // check for a winner
 	  if (state.contains("k") && !state.contains("K")) winner = 'B';
 	  else if (!state.contains("k") && state.contains("K")) winner = 'W';
+	  // check for draw
 	  else if (playCount > 40)
 		winner = '=';
 	  // not a draw or a winner, game continues
 	  else winner = '?';
 
 	  return winner;
-	  // check if game is a draw
-	  /*	  if (playCount > 40)
-		winner = '=';
-	  // check for a winner
-	  else if (state.contains("k") && !state.contains("K")) winner = 'B';
-	  else if (!state.contains("k") && state.contains("K")) winner = 'W';
-	  // not a draw or a winner, game continues
-	  else winner = '?';
-
-	  return winner;*/
 	}
 	
 	public static boolean isValid(int intX, int intY) {
