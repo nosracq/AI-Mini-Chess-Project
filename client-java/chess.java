@@ -210,9 +210,42 @@ public class chess {
 
 	// with reference to the state of the game, return the evaluation score of the side on move - 
     // note that positive means an advantage while negative means a disadvantage	
+    //
+    // ----- Piece Values ------
+    // pawn   = 1
+    // knight = 3
+    // bishop = 3
+    // rook   = 5
+    // queen  = 10
+    // king   = 100
+    // -------------------------
 	public static int eval() {
-		
-		return 0;
+	  String state = boardGet();
+	  // adjustment to only contain board
+	  state = state.substring(state.length() - 36);
+	  int score = 0;
+	  for (char c: state.toCharArray()){
+		switch(c) {
+		  // black
+		  case 'k': score += 100; break;
+		  case 'q': score += 10; break;
+		  case 'r': score += 5; break;
+	 	  case 'b': score += 3; break;
+		  case 'n': score += 3; break;
+		  case 'p': score += 1; break;
+		  // white
+		  case 'K': score -= 100; break;
+		  case 'Q': score -= 10; break;
+		  case 'R': score -= 5; break;
+		  case 'B': score -= 3; break;
+		  case 'N': score -= 3; break;
+		  case 'P': score -= 1; break;
+        }
+      }
+	  if (nextMove == 'W' && score != 0)
+		score = -score;	
+	
+	  return score;
 	}
 
 	// with reference to the state of the game and return the possible moves - one example is given below - 
