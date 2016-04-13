@@ -15,49 +15,47 @@ public class chess {
 	  playCount = 1;
 	  nextMove = 'W';
 
-      board[0][0] = '1';
-      board[0][1] = ' ';
-      board[0][2] = 'W';
-      board[0][3] = '\n';
-      board[1][0] = 'k';
-      board[1][1] = 'q';
-      board[1][2] = 'b';
-      board[1][3] = 'n';
-      board[1][4] = 'r';
-      board[1][5] = '\n';
+      board[6][0] = '1';
+      board[6][1] = ' ';
+      board[6][2] = 'W';
+      board[6][3] = '\n';
+      board[5][0] = 'k';
+      board[5][1] = 'q';
+      board[5][2] = 'b';
+      board[5][3] = 'n';
+      board[5][4] = 'r';
+      board[5][5] = '\n';
 
       for (int i = 0; i < 5; i++)
-        board[2][i] = 'p';
-      board[2][5] = '\n';
+        board[4][i] = 'p';
+      board[4][5] = '\n';
 
       for (int i = 0; i < 5; i++)
         board[3][i] = '.';
       board[3][5] = '\n';
 
       for (int i = 0; i < 5; i++)
-        board[4][i] = '.';
-      board[4][5] = '\n';
+        board[2][i] = '.';
+      board[2][5] = '\n';
 
       for (int i = 0; i < 5; i++)
-        board[5][i] = 'P';
-      board[5][5] = '\n';
+        board[1][i] = 'P';
+      board[1][5] = '\n';
 
-      board[6][0] = 'R';
-      board[6][1] = 'N';
-      board[6][2] = 'B';
-      board[6][3] = 'Q';
-      board[6][4] = 'K';
-      board[6][5] = '\n';
-
-	  moves.add("a2-a3\n");
+      board[0][0] = 'R';
+      board[0][1] = 'N';
+      board[0][2] = 'B';
+      board[0][3] = 'Q';
+      board[0][4] = 'K';
+      board[0][5] = '\n';
 
 	}
 
 	// return the state of the game - one example is given below - note that the state has exactly 40 or 41 characters	
 	public static String boardGet() {
   	    StringBuilder strBuilder = new StringBuilder();
-		for(int i = 0; i < board.length; i++) {
-		  for (int j = 0; j < board[j].length; j++) {
+		for(int i = board.length - 1; i >= 0; i--) {
+		  for (int j = 0; j < board[i].length; j++) {
 			strBuilder.append(board[i][j]);
 			if (board[i][j]=='\n') break;
           }
@@ -74,13 +72,14 @@ public class chess {
 
 		int idx = 0;
 		while (idx < chars.length) {
-		  for (int i = 0; i < board.length; i++)
+   		  for (int i = board.length - 1; i >= 0; i--)
      		for (int j = 0; j < board[j].length; j++) {
 			  board[i][j] = chars[idx];
 			  idx++;
 			  if (board[i][j] == '\n') break;
 			}
         }
+		// Setting interna, playCount and nextMove
 		if (chars[1] == ' ') {
 		  playCount = Character.getNumericValue(chars[0]);
 		  nextMove = chars[2];
@@ -252,17 +251,42 @@ public class chess {
     // note that a move has exactly 6 characters
 	public static Vector<String> moves() {
 		
-		Vector<String> strOut = new Vector<String>();
+	  Vector<String> strOut = new Vector<String>();
 		
-		strOut.add("a2-a3\n");
-		strOut.add("b2-b3\n");
-		strOut.add("c2-c3\n");
-		strOut.add("d2-d3\n");
-		strOut.add("e2-e3\n");
-		strOut.add("b1-a3\n");
-		strOut.add("b1-c3\n");
+	  strOut.add("a2-a3\n");
+	  strOut.add("b2-b3\n");
+      strOut.add("c2-c3\n");
+	  strOut.add("d2-d3\n");
+	  strOut.add("e2-e3\n");
+	  strOut.add("b1-a3\n");
+	  strOut.add("b1-c3\n");
 		
-		return strOut;
+	  /*
+	  Vector<String> pawnMoves = new Vector<String>();
+	  Vector<String> rookMoves = new Vector<String>();
+	  Vector<String> knightMoves = new Vector<String>();
+	  Vector<String> bishopMoves = new Vector<String>();
+	  Vector<String> queenMoves = new Vector<String>();
+	  Vector<String> kingMoves = new Vector<String>();
+	  
+	  char piece = '';
+	  for (int i = 1; i < board.length; i++) {
+		for (int j = 0; j < board[i].length; j++) {
+		  if (isOwn(board[i][j])) {
+			piece = board[i][j];
+		    // Pawns
+
+		  }
+        }
+		}
+	  strOut.addAll(pawnMoves);
+	  strOut.addAll(rookMoves);
+	  strOut.addAll(knightMoves);
+	  strOut.addAll(bishopMoves);
+	  strOut.addAll(queenMoves);
+	  strOut.addAll(kingMoves);
+*/
+	  return strOut;
 	}
 	
 	// with reference to the state of the game, determine the possible moves and shuffle them before returning them - 
