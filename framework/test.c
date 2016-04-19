@@ -2457,7 +2457,7 @@ bool test_move() {
 	if (strcmp(charBuffer, "1 B\nkqbnr\nppppp\n.....\n..P..\nPP.PP\nRNBQK\n") != 0) {
 		return false;
 	}
-	
+			
 	chess_boardSet("17 B\nq...r\npkp.p\n...pn\nN.Q..\nR..BP\n....K\n");
 	chess_move("a5-a4");
 	
@@ -2465,7 +2465,7 @@ bool test_move() {
 	if (strcmp(charBuffer, "18 W\nq...r\n.kp.p\np..pn\nN.Q..\nR..BP\n....K\n") != 0) {
 		return false;
 	}
-	
+		
 	chess_boardSet("19 B\nkb...\n.....\n..P.p\n...Pp\n..P.P\n.QK..\n");
 	chess_move("b6-d4");
 	
@@ -2473,7 +2473,7 @@ bool test_move() {
 	if (strcmp(charBuffer, "20 W\nk....\n.....\n..Pbp\n...Pp\n..P.P\n.QK..\n") != 0) {
 		return false;
 	}
-	
+		
 	chess_boardSet("12 W\n.....\nkbqpr\nppp.p\n...PP\nPPPQK\nRB...\n");
 	chess_move("c2-c3");
 	
@@ -2481,7 +2481,7 @@ bool test_move() {
 	if (strcmp(charBuffer, "12 B\n.....\nkbqpr\nppp.p\n..PPP\nPP.QK\nRB...\n") != 0) {
 		return false;
 	}
-	
+			
 	chess_boardSet("13 W\nk.b.r\npp...\n.qpPQ\n...P.\n.BP..\nRN..K\n");
 	chess_move("d3-c4");
 	
@@ -2489,7 +2489,7 @@ bool test_move() {
 	if (strcmp(charBuffer, "13 B\nk.b.r\npp...\n.qPPQ\n.....\n.BP..\nRN..K\n") != 0) {
 		return false;
 	}
-	
+		
 	chess_boardSet("17 B\nk.r..\np.q.p\n.b...\nNPP.K\nP..P.\n.B.RQ\n");
 	chess_move("c5-e3");
 	
@@ -2497,10 +2497,10 @@ bool test_move() {
 	if (strcmp(charBuffer, "18 W\nk.r..\np...p\n.b...\nNPP.q\nP..P.\n.B.RQ\n") != 0) {
 		return false;
 	}
-	
+		
 	chess_boardSet("14 W\n.kb.r\nPp..p\n.Bp.P\n.pNPq\nR..nK\n...Q.\n");
 	chess_move("a5-a6");
-	
+		
 	chess_boardGet(charBuffer);
 	if (strcmp(charBuffer, "14 B\nQkb.r\n.p..p\n.Bp.P\n.pNPq\nR..nK\n...Q.\n") != 0) {
 		return false;
@@ -2513,7 +2513,7 @@ bool test_move() {
 	if (strcmp(charBuffer, "15 W\nQk..r\n..bqp\n..ppP\n.....\n.PpPB\nRN..K\n") != 0) {
 		return false;
 	}
-	
+		
 	chess_boardSet("21 W\nk..nr\n.....\n..pqp\nP.PP.\n...Q.\nR...K\n");
 	chess_move("d2-c2");
 	
@@ -3249,7 +3249,7 @@ bool test_move() {
 	if (strcmp(charBuffer, "19 B\n.k..r\npbppp\n.....\n.P..B\n.p.KP\n.....\n") != 0) {
 		return false;
 	}
-	
+		
 	return true;
 }
 

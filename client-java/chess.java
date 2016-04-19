@@ -250,17 +250,7 @@ public class chess {
 	// with reference to the state of the game and return the possible moves - one example is given below - 
     // note that a move has exactly 6 characters
 	public static Vector<String> moves() {
-		
 	  Vector<String> strOut = new Vector<String>();
-	  /*
-	  strOut.add("a2-a3\n");
-	  strOut.add("b2-b3\n");
-      strOut.add("c2-c3\n");
-	  strOut.add("d2-d3\n");
-	  strOut.add("e2-e3\n");
-	  strOut.add("b1-a3\n");
-	  strOut.add("b1-c3\n");
-	  */
 	  char piece;
 
 	  for (int row = 0; row < board.length; row++) {
@@ -294,14 +284,6 @@ public class chess {
 		  }
         }
 	  }
-	  /*
-	  strOut.addAll(pawnMoves);
-	  strOut.addAll(rookMoves);
-	  strOut.addAll(knightMoves);
-	  strOut.addAll(bishopMoves);
-	  strOut.addAll(queenMoves);
-	  strOut.addAll(kingMoves);
-	  */
 	  return strOut;
 	}
 
@@ -879,6 +861,86 @@ public class chess {
 	  return kingMoves;
     }
 	
+	// perform the supplied move (for example "a5-a4\n") and update the state of the game / your internal variables accordingly - 
+    // note that it advised to do a sanity check of the supplied move
+	public static void move(String charIn) {
+	  char srcCol = charIn.charAt(0);
+	  char destCol = charIn.charAt(3);
+	  int srcColIdx;
+	  int destColIdx;
+	  int srcRowIdx;
+	  int destRowIdx;
+	  char [] plyChars = new char[2];
+
+	  // translate to array indecies
+	  srcColIdx = colIndex(srcCol);
+	  srcRowIdx = Character.getNumericValue(charIn.charAt(1)) - 1;
+	  destColIdx = colIndex(destCol);
+	  destRowIdx = Character.getNumericValue(charIn.charAt(4)) - 1;
+
+	  // update vars for ply and color on move and queen promotion
+	  if (nextMove == 'W') {
+		nextMove = 'B';
+		if (board[srcRowIdx][srcColIdx] == 'P' && destRowIdx == 5) {
+  	      board[srcRowIdx][srcColIdx] = '.';
+		  board[destRowIdx][destColIdx] = 'Q';
+        }
+		else {
+	      // update board for all other moves
+	      board[destRowIdx][destColIdx] = board[srcRowIdx][srcColIdx];
+	      board[srcRowIdx][srcColIdx] = '.';
+        }
+	  }
+	  else if (nextMove == 'B') {
+		nextMove = 'W';
+		if (board[srcRowIdx][srcColIdx] == 'p' && destRowIdx == 0) {
+  	      board[srcRowIdx][srcColIdx] = '.';
+		  board[destRowIdx][destColIdx] = 'q';
+        }
+		else {
+	      // update board for all other moves
+	      board[destRowIdx][destColIdx] = board[srcRowIdx][srcColIdx];
+	      board[srcRowIdx][srcColIdx] = '.';
+        }
+		playCount++;
+      }
+
+	  plyChars = ("" + playCount).toCharArray();
+
+	  // update board with ply and next move
+	  if (playCount < 10) {
+		board[6][0] = plyChars[0];
+		board[6][1] = ' ';
+		board[6][2] = nextMove;
+		board[6][3] = '\n';
+      }
+	  else if (playCount >= 10) {
+		board[6][0] = plyChars[0];
+		board[6][1] = plyChars[1];
+		board[6][2] = ' ';
+		board[6][3] = nextMove;
+		board[6][4] = '\n';
+      }
+	}
+    public static int colIndex(char col) {
+	  int idx = 0;
+	  switch(col) {
+	    case 'a': idx = 0; break;
+	    case 'b': idx = 1; break; 
+	    case 'c': idx = 2; break;
+	    case 'd': idx = 3; break;
+	    case 'e': idx = 4; break;
+      }
+	  return idx;
+    }
+
+
+    // **************************************************************
+    // *********************** END OF HOMEOWORK 2 *******************
+    // **************************************************************
+
+	
+
 	// with reference to the state of the game, determine the possible moves and shuffle them before returning them - 
     // note that you can call the chess.moves() function in here
 	public static Vector<String> movesShuffled() {
@@ -893,20 +955,6 @@ public class chess {
 		return new Vector<String>();
 	}
 	
-	// perform the supplied move (for example "a5-a4\n") and update the state of the game / your internal variables accordingly - 
-    // note that it advised to do a sanity check of the supplied move
-	public static void move(String charIn) {
-	}
-
-
-
-
-    // **************************************************************
-    // *********************** END OF HOMEOWORK 2 *******************
-    // **************************************************************
-
-	
-
 	public static String moveRandom() {
 		// perform a random move and return it - one example output is given below - note that you can call the chess.movesShuffled() function as well as the chess.move() function in here
 		
