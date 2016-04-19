@@ -252,7 +252,7 @@ public class chess {
 	public static Vector<String> moves() {
 		
 	  Vector<String> strOut = new Vector<String>();
-		
+	  /*
 	  strOut.add("a2-a3\n");
 	  strOut.add("b2-b3\n");
       strOut.add("c2-c3\n");
@@ -260,34 +260,624 @@ public class chess {
 	  strOut.add("e2-e3\n");
 	  strOut.add("b1-a3\n");
 	  strOut.add("b1-c3\n");
-		
-	  /*
-	  Vector<String> pawnMoves = new Vector<String>();
-	  Vector<String> rookMoves = new Vector<String>();
-	  Vector<String> knightMoves = new Vector<String>();
-	  Vector<String> bishopMoves = new Vector<String>();
-	  Vector<String> queenMoves = new Vector<String>();
-	  Vector<String> kingMoves = new Vector<String>();
-	  
-	  char piece = '';
-	  for (int i = 1; i < board.length; i++) {
-		for (int j = 0; j < board[i].length; j++) {
-		  if (isOwn(board[i][j])) {
-			piece = board[i][j];
-		    // Pawns
+	  */
+	  char piece;
 
+	  for (int row = 0; row < board.length; row++) {
+		for (int col = 0; col < board[row].length; col++) {
+		  piece = board[row][col];
+		  if (isOwn(piece)) {
+		    // Pawns
+			if (Character.toUpperCase(piece)=='P') {
+			  strOut.addAll(pawnMoves(col, row));
+            }
+			// Knights
+			if (Character.toUpperCase(piece)=='N') {
+			  strOut.addAll(knightMoves(col, row));
+            }
+			// Bishops
+			if (Character.toUpperCase(piece)=='B') {
+			  strOut.addAll(bishopMoves(col, row));
+            }
+            // Rooks
+			if (Character.toUpperCase(piece)=='R') {
+			  strOut.addAll(rookMoves(col, row));
+            }
+            // Queen
+			if (Character.toUpperCase(piece)=='Q') {
+			  strOut.addAll(queenMoves(col, row));
+            }
+            // King
+			if (Character.toUpperCase(piece)=='K') {
+			  strOut.addAll(kingMoves(col, row));
+            }
 		  }
         }
-		}
+	  }
+	  /*
 	  strOut.addAll(pawnMoves);
 	  strOut.addAll(rookMoves);
 	  strOut.addAll(knightMoves);
 	  strOut.addAll(bishopMoves);
 	  strOut.addAll(queenMoves);
 	  strOut.addAll(kingMoves);
-*/
+	  */
 	  return strOut;
 	}
+
+    // translates the move from array indicies to a string representing the chess board coordinates
+    public static String getMoveStr(int srcCol, int srcRow, int destCol, int destRow) {
+	  StringBuilder moveStr = new StringBuilder();
+
+	  switch (srcCol) {
+        case 0: moveStr.append("a"); break;
+	    case 1: moveStr.append("b"); break;
+	    case 2: moveStr.append("c"); break;
+	    case 3: moveStr.append("d"); break;
+	    case 4: moveStr.append("e"); break;
+      }	  
+	  moveStr.append(String.valueOf(srcRow));
+	  moveStr.append("-");
+	  switch (destCol) {
+        case 0: moveStr.append("a"); break;
+	    case 1: moveStr.append("b"); break;
+	    case 2: moveStr.append("c"); break;
+	    case 3: moveStr.append("d"); break;
+	    case 4: moveStr.append("e"); break;
+      }
+	  moveStr.append(String.valueOf(destRow));
+	  moveStr.append("\n");
+	  return moveStr.toString();
+    }
+
+    public static Vector<String> pawnMoves(int col, int row) {
+	  Vector<String> pawnMoves = new Vector<String>();
+	  // Valid pawn moves for white
+	  if (nextMove == 'W') {
+		// moving forward
+		if (isValid(col, row + 1) && board[row + 1][col] == '.')
+		  pawnMoves.add(getMoveStr(col, row + 1, col, row + 2));
+		// moving diagonally left
+		if (isValid(col-1, row + 1) && isEnemy(board[row + 1][col - 1]))
+		  pawnMoves.add(getMoveStr(col, row + 1, col - 1, row + 2));
+		// moving diagonally right
+		if (isValid(col + 1, row + 1) && isEnemy(board[row + 1][col + 1]))
+		  pawnMoves.add(getMoveStr(col, row + 1, col + 1, row + 2));
+      }
+
+	  // valid pawn moves for black
+	  else if (nextMove == 'B') {
+		// moving forward
+		if (isValid(col, row - 1) && board[row - 1][col] == '.')
+		  pawnMoves.add(getMoveStr(col, row + 1, col, row));
+		// moving diagonally left
+		if (isValid(col - 1, row - 1) && isEnemy(board[row - 1][col - 1]))
+		  pawnMoves.add(getMoveStr(col, row + 1, col - 1, row));
+		// moving diagonally right
+		if (isValid(col + 1, row - 1) && isEnemy(board[row - 1][col + 1]))
+		  pawnMoves.add(getMoveStr(col, row + 1, col + 1, row));
+      }
+	  return pawnMoves;	  
+    }
+    public static Vector<String> knightMoves(int col, int row) {
+	  Vector<String> knightMoves = new Vector<String>();
+	  // Valid knight moves for white
+	  if (nextMove == 'W') {
+	    // moving forward then right
+		if (isValid(col + 1, row + 2) && !isOwn(board[row + 2][col + 1]))
+		  knightMoves.add(getMoveStr(col, row + 1, col + 1, row + 3));
+		// moving forward then left
+		if (isValid(col - 1, row + 2) && !isOwn(board[row + 2][col - 1]))
+		  knightMoves.add(getMoveStr(col, row + 1, col - 1, row + 3));
+	    // moving backward then right
+		if (isValid(col + 1, row - 2) && !isOwn(board[row - 2][col + 1]))
+		  knightMoves.add(getMoveStr(col, row + 1, col + 1, row - 1));
+		// moving backward then left
+		if (isValid(col - 1, row - 2) && !isOwn(board[row - 2][col - 1]))		          
+          knightMoves.add(getMoveStr(col, row + 1, col - 1, row - 1));
+	    // moving right then forward
+		if (isValid(col + 2, row + 1) && !isOwn(board[row + 1][col + 2]))
+		  knightMoves.add(getMoveStr(col, row + 1, col + 2, row  + 2));
+		// moving left then forward
+		if (isValid(col - 2, row + 1) && !isOwn(board[row + 1][col - 2]))
+		  knightMoves.add(getMoveStr(col, row + 1, col - 2, row  + 2));
+		// moving right then backward
+		if (isValid(col + 2, row - 1) && !isOwn(board[row - 1][col + 2]))
+		  knightMoves.add(getMoveStr(col, row + 1, col + 2, row));
+	    // moving left then backward
+		if (isValid(col - 2, row - 1) && !isOwn(board[row - 1][col - 2]))
+		  knightMoves.add(getMoveStr(col, row + 1, col - 2, row));
+	  }
+	  // Valid knight moves for black
+	  else if (nextMove == 'B') {
+	    // moving forward then right
+		if (isValid(col + 1, row - 2) && !isOwn(board[row - 2][col + 1]))
+		  knightMoves.add(getMoveStr(col, row + 1, col + 1, row -1));
+		// moving forward then left
+		if (isValid(col - 1, row - 2) && !isOwn(board[row - 2][col - 1]))
+		  knightMoves.add(getMoveStr(col, row + 1, col - 1, row - 1));
+
+	    // moving backward then right
+		if (isValid(col + 1, row + 2) && !isOwn(board[row + 2][col + 1]))
+		  knightMoves.add(getMoveStr(col, row + 1, col + 1, row + 3));
+
+		// moving backward then left
+		if (isValid(col - 1, row + 2) && !isOwn(board[row + 2][col - 1]))
+		  knightMoves.add(getMoveStr(col, row + 1, col - 1, row + 3));
+
+	    // moving right then forward
+		if (isValid(col + 2, row - 1) && !isOwn(board[row - 1][col + 2]))
+		  knightMoves.add(getMoveStr(col, row + 1, col + 2, row));
+
+		// moving left then forward
+		if (isValid(col - 2, row - 1) && !isOwn(board[row - 1][col - 2]))
+		  knightMoves.add(getMoveStr(col, row + 1, col - 2, row));
+
+		// moving right then backward
+		if (isValid(col + 2, row + 1) && !isOwn(board[row + 1][col + 2]))
+		  knightMoves.add(getMoveStr(col, row + 1, col + 2, row + 2));
+
+	    // moving left then backward
+		if (isValid(col - 2, row + 1) && !isOwn(board[row + 1][col - 2]))
+		  knightMoves.add(getMoveStr(col, row + 1, col - 2, row + 2));
+      }
+	  return knightMoves;
+    }
+    public static Vector<String> bishopMoves(int col, int row) {
+	  Vector<String> bishopMoves = new Vector<String>();
+	  int c;
+	  int r;
+	  // valid bishop moves for white
+	  if (nextMove == 'W') {
+		// changing tile colors when not capturing
+		if (isValid(col, row + 1) && board[row + 1][col] == '.') {
+		  bishopMoves.add(getMoveStr(col, row + 1, col, row + 2));
+        }
+		// moving backward
+		if (isValid(col, row - 1) && board[row - 1][col] == '.') {
+		  bishopMoves.add(getMoveStr(col, row + 1, col, row));
+        }
+		// moving right
+		if (isValid(col + 1, row) && board[row][col + 1] =='.') {
+		  bishopMoves.add(getMoveStr(col, row + 1, col + 1, row + 1));
+        }
+		// moving left
+		if (isValid(col - 1, row) && board[row][col - 1] == '.') {
+		  bishopMoves.add(getMoveStr(col, row + 1, col - 1, row + 1));
+        }
+    	// moving forward and to the right
+		c = col + 1;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  bishopMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+		  r++;
+        }
+	    // moving forward and to the left
+		c = col - 1;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  bishopMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+		  r++;
+        }
+	    // moving backward and to the right
+		c = col + 1;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  bishopMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+		  r--;
+        }
+	    // moving backward and to the left
+		c = col - 1;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  bishopMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+		  r--;
+        }
+	  }
+	  // valid bishop moves for black
+	  else if (nextMove == 'B') {
+		// changing tile color when not capturing
+		// moving forward
+		if (isValid(col, row - 1) && board[row - 1][col] == '.') {
+		  bishopMoves.add(getMoveStr(col, row + 1, col, row));
+        }
+		// moving backward
+		if (isValid(col, row + 1) && board[row + 1][col] == '.') {
+		  bishopMoves.add(getMoveStr(col, row + 1, col, row + 2));
+        }
+		// moving right
+		if (isValid(col + 1, row) && board[row][col + 1] == '.') {
+		  bishopMoves.add(getMoveStr(col, row + 1, col + 1, row + 1));
+        }
+		// moving left
+		if (isValid(col - 1, row) && board[row][col - 1] == '.') {
+		  bishopMoves.add(getMoveStr(col, row + 1, col - 1, row + 1));
+        }
+	    // moving forward and to the right
+		c = col + 1;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  bishopMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+		  r--;
+        }
+	    // moving forward and to the left
+		c = col - 1;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  bishopMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+		  r--;
+        }
+	    // moving backward and to the right
+		c = col + 1;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  bishopMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+		  r++;
+        }
+	    // moving backward and to the left
+		c = col - 1;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  bishopMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+		  r++;
+        }
+	  }
+	  return bishopMoves;
+    }
+    public static Vector<String> rookMoves(int col, int row) {
+	  Vector<String> rookMoves = new Vector<String>();
+	  int c;
+	  int r;
+	  // valid rook moves for white
+	  if (nextMove == 'W') {
+    	// moving forward
+		c = col;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  rookMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  r++;
+        }
+	    // moving backward
+		c = col;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  rookMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  r--;
+        }
+	    // moving to the right
+		c = col + 1;
+		r = row;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  rookMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+        }
+	    // moving to the left
+		c = col - 1;
+		r = row;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  rookMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+        }
+	  }
+	  // valid rook moves for black
+	  else if (nextMove == 'B') {
+    	// moving forward
+		c = col;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  rookMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  r--;
+        }
+	    // moving backward
+		c = col;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  rookMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  r++;
+        }
+	    // moving to the right
+		c = col + 1;
+		r = row;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  rookMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+        }
+	    // moving to the left
+		c = col - 1;
+		r = row;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  rookMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+        }
+
+      }
+	  return rookMoves;
+    }
+    public static Vector<String> queenMoves(int col, int row) {
+	  Vector<String> queenMoves = new Vector<String>();
+	  int c;
+	  int r;
+	  // valid queen moves for white
+	  if (nextMove == 'W') {
+		// moving forward
+		c = col;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  r++;
+		}
+		// moving forward and to the right
+		c = col + 1;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+		  r++;
+		}
+		// moving forward and to the left
+		c = col - 1;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+		  r++;
+		}
+		// moving backward
+		c = col;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  r--;
+		}
+		// moving backward and to the right
+		c = col + 1;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+		  r--;
+		}
+		// moving backward and to the left
+		c = col - 1;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+		  r--;
+		}
+	    // moving to the right
+		c = col + 1;
+		r = row;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+        }
+	    // moving to the left
+		c = col - 1;
+		r = row;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+        }
+
+      }
+
+	  // valid queen moves for black
+	  else if (nextMove == 'B') {
+		// moving forward
+		c = col;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  r--;
+        }
+		// moving forward and to the right
+		c = col + 1;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+		  r--;
+        }
+		// moving forward and to the left
+		c = col - 1;
+		r = row - 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+		  r--;
+        }
+		// moving backward
+		c = col;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  r++;
+        }
+
+		// moving backward and to the right
+		c = col + 1;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+		  r++;
+        }
+		// moving backward and to the left
+		c = col - 1;
+		r = row + 1;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+		  r++;
+        }
+	    // moving to the right
+		c = col + 1;
+		r = row;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c++;
+        }
+	    // moving to the left
+		c = col - 1;
+		r = row;
+		while (isValid (c, r) && !isOwn(board[r][c])) {
+		  queenMoves.add(getMoveStr(col, row + 1, c, r + 1));
+		  // cannot jump pieces
+		  if (isEnemy(board[r][c])) break;
+		  c--;
+        }
+
+      }
+	  return queenMoves;
+    }
+    public static Vector<String> kingMoves(int col, int row) {
+	  Vector<String> kingMoves = new Vector<String>();
+	  // valid king moves for white
+	  if (nextMove == 'W') {
+		// moving forward
+		if (isValid(col, row + 1) && !isOwn(board[row + 1][col])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col, row + 2));
+        }
+		// moving backward
+		if (isValid(col, row - 1) && !isOwn(board[row - 1][col])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col, row));
+        }
+		// moving right
+		if (isValid(col + 1, row) && !isOwn(board[row][col + 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col + 1, row + 1));
+        }
+		// moving left
+		if (isValid(col - 1, row) && !isOwn(board[row][col - 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col - 1, row + 1));
+        }
+		// moving forward then right
+		if (isValid(col + 1, row + 1) && !isOwn(board[row + 1][col + 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col + 1, row + 2));
+        }
+		// moving forward then left
+		if (isValid(col - 1, row + 1) && !isOwn(board[row + 1][col - 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col - 1, row + 2));
+        }
+		// moving backward then right
+		if (isValid(col + 1, row - 1) && !isOwn(board[row - 1][col + 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col + 1, row));
+        }
+
+		// moving backward then left
+		if (isValid(col - 1, row - 1) && !isOwn(board[row - 1][col - 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col - 1, row));
+        }
+      }
+	  // valid queen moves for black
+	  else if (nextMove == 'B') {
+		// moving forward
+		if (isValid(col, row - 1) && !isOwn(board[row - 1][col])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col, row));
+        }
+		// moving backward
+		if (isValid(col, row + 1) && !isOwn(board[row + 1][col])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col, row + 2));
+        }
+		// moving right
+		if (isValid(col + 1, row) && !isOwn(board[row][col + 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col + 1, row + 1));
+        }
+		// moving left
+		if (isValid(col - 1, row) && !isOwn(board[row][col - 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col - 1, row + 1));
+        }
+		// moving forward then right
+		if (isValid(col + 1, row - 1) && !isOwn(board[row - 1][col + 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col + 1, row));
+        }
+		// moving forward then left
+		if (isValid(col - 1, row - 1) && !isOwn(board[row - 1][col - 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col - 1, row));
+        }
+		// moving backward then right
+		if (isValid(col + 1, row + 1) && !isOwn(board[row + 1][col + 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col + 1, row + 2));
+        }
+
+		// moving backward then left
+		if (isValid(col - 1, row + 1) && !isOwn(board[row + 1][col - 1])) {
+		  kingMoves.add(getMoveStr(col, row + 1, col - 1, row + 2));
+        }
+
+      }
+	  return kingMoves;
+    }
 	
 	// with reference to the state of the game, determine the possible moves and shuffle them before returning them - 
     // note that you can call the chess.moves() function in here
