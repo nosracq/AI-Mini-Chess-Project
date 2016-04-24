@@ -1,4 +1,6 @@
 import java.util.Vector;
+import java.util.Stack;
+import java.util.Collections;
 import java.io.*;
 
 public class chess {
@@ -7,7 +9,7 @@ public class chess {
     static char nextMove;
     static char [][] board = new char[7][6];
     static Vector<String> moves = new Vector<String>();
-
+    static Stack<String> boardHist = new Stack<String>();
     public chess() { reset();}
 
 	// reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
@@ -872,6 +874,9 @@ public class chess {
 	  int destRowIdx;
 	  char [] plyChars = new char[2];
 
+	  // add current state of the board to boardHist for undo functionality
+	  boardHist.push(boardGet());
+
 	  // translate to array indecies
 	  srcColIdx = colIndex(srcCol);
 	  srcRowIdx = Character.getNumericValue(charIn.charAt(1)) - 1;
@@ -939,22 +944,33 @@ public class chess {
     // *********************** END OF HOMEOWORK 2 *******************
     // **************************************************************
 
-	
+	// undo the last move and update the state of the game / your internal variables accordingly - 
+    // note that you need to maintain an internal variable that keeps track of the previous history for this	
 	public static void undo() {
-		// undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
+	  boardSet(boardHist.pop());
 	}
 
 	// with reference to the state of the game, determine the possible moves and shuffle them before returning them - 
     // note that you can call the chess.moves() function in here
 	public static Vector<String> movesShuffled() {
-		
-		return new Vector<String>();
+	  Vector<String> rawMoves = moves();
+	  Collections.shuffle(rawMoves);
+	  return rawMoves;
 	}
 	
-		// with reference to the state of the game, determine the possible moves and sort them in order of an increasing evaluation score before returning them - note that you can call the chess.movesShuffled() function in here
+	// with reference to the state of the game, determine the possible moves and sort them in order of an increasing evaluation score before returning them - 
+    // note that you can call the chess.movesShuffled() function in here
 	public static Vector<String> movesEvaluated() {
+	  Vector<String> randMoves = movesShuffled();
+	  int [] evals = new int[randMoves.size()];
 
-		return new Vector<String>();
+	  for(int i=0; i < randMoves.size(); i++) {
+		move(randMoves.get(i));
+		evals[i] = eval();
+		undo();
+      }
+
+	  return new Vector<String>();
 	}
 
 
@@ -963,27 +979,28 @@ public class chess {
     // **************************************************************
 
 
-	
+	// perform a random move and return it - one example output is given below - 
+	// note that you can call the chess.movesShuffled() function as well as the chess.move() function in here	
 	public static String moveRandom() {
-		// perform a random move and return it - one example output is given below - note that you can call the chess.movesShuffled() function as well as the chess.move() function in here
 		
 		return "a2-a3\n";
 	}
-	
+
+	// perform a greedy move and return it - one example output is given below - 
+    // note that you can call the chess.movesEvaluated() function as well as the chess.move() function in here
 	public static String moveGreedy() {
-		// perform a greedy move and return it - one example output is given below - note that you can call the chess.movesEvaluated() function as well as the chess.move() function in here
 		
 		return "a2-a3\n";
 	}
-	
+
+	// perform a negamax move and return it - one example output is given below - note that you can call the the other functions in here
 	public static String moveNegamax(int intDepth, int intDuration) {
-		// perform a negamax move and return it - one example output is given below - note that you can call the the other functions in here
 		
 		return "a2-a3\n";
 	}
-	
+
+	// perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here		
 	public static String moveAlphabeta(int intDepth, int intDuration) {
-		// perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here
 		
 		return "a2-a3\n";
 	}
