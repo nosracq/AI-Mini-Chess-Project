@@ -940,6 +940,9 @@ public class chess {
     // **************************************************************
 
 	
+	public static void undo() {
+		// undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
+	}
 
 	// with reference to the state of the game, determine the possible moves and shuffle them before returning them - 
     // note that you can call the chess.moves() function in here
@@ -954,6 +957,13 @@ public class chess {
 		
 		return new Vector<String>();
 	}
+
+
+    // **************************************************************
+    // *********************** END OF HOMEOWORK 3 *******************
+    // **************************************************************
+
+
 	
 	public static String moveRandom() {
 		// perform a random move and return it - one example output is given below - note that you can call the chess.movesShuffled() function as well as the chess.move() function in here
@@ -979,7 +989,4 @@ public class chess {
 		return "a2-a3\n";
 	}
 	
-	public static void undo() {
-		// undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
-	}
 }
