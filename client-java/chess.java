@@ -1,6 +1,7 @@
 import java.util.Vector;
 import java.util.Stack;
 import java.util.Collections;
+import java.util.Arrays;
 import java.io.*;
 
 public class chess {
@@ -960,18 +961,49 @@ public class chess {
 	
 	// with reference to the state of the game, determine the possible moves and sort them in order of an increasing evaluation score before returning them - 
     // note that you can call the chess.movesShuffled() function in here
-	public static Vector<String> movesEvaluated() {
+    public static Vector<String> movesEvaluated() {
+	  Vector<String> sortedMoves = new Vector<String>();
 	  Vector<String> randMoves = movesShuffled();
-	  int [] evals = new int[randMoves.size()];
+	  RatedMove[] movesWithEval = new RatedMove[randMoves.size()];
 
 	  for(int i=0; i < randMoves.size(); i++) {
+		// do the move
 		move(randMoves.get(i));
-		evals[i] = eval();
+		// store the move and eval score
+	    movesWithEval[i] = new RatedMove(randMoves.get(i), eval());
+		// undo the move
 		undo();
       }
 
-	  return new Vector<String>();
-	}
+	  // sort moves in increasing order
+	  Arrays.sort(movesWithEval);
+
+	  // create a list that just has the moves sorted by eval score
+	  for(RatedMove m: movesWithEval) {
+		sortedMoves.add(m.getMove());
+      }
+
+	  return sortedMoves;
+    }
+
+
+    // Class for managing a list of moves assosiated with an eval score
+    public static class RatedMove implements Comparable<RatedMove> {
+	  public String move;
+	  public int eval;
+
+	  public RatedMove(String m, int ev) {
+	    this.move = m;
+	    this.eval = ev;
+      }
+	  public String getMove() { return move;}
+	  public int getEval() { return eval;}
+	  public int compareTo(RatedMove compareMove) {
+	    int compareEval = ((RatedMove) compareMove).getEval();
+	    // sort in ascending order
+	    return this.eval - compareEval;
+      }
+    }
 
 
     // **************************************************************
@@ -979,11 +1011,12 @@ public class chess {
     // **************************************************************
 
 
+
 	// perform a random move and return it - one example output is given below - 
 	// note that you can call the chess.movesShuffled() function as well as the chess.move() function in here	
 	public static String moveRandom() {
 		
-		return "a2-a3\n";
+	  return movesShuffled().firstElement();
 	}
 
 	// perform a greedy move and return it - one example output is given below - 
@@ -993,16 +1026,33 @@ public class chess {
 		return "a2-a3\n";
 	}
 
+
+    // **************************************************************
+    // *********************** END OF HOMEOWORK 4 *******************
+    // **************************************************************
+
+
 	// perform a negamax move and return it - one example output is given below - note that you can call the the other functions in here
 	public static String moveNegamax(int intDepth, int intDuration) {
 		
 		return "a2-a3\n";
 	}
 
+
+    // **************************************************************
+    // *********************** END OF HOMEOWORK 5 *******************
+    // **************************************************************
+
+
 	// perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here		
 	public static String moveAlphabeta(int intDepth, int intDuration) {
 		
 		return "a2-a3\n";
 	}
+
+
+    // **************************************************************
+    // *********************** END OF HOMEOWORK 6 *******************
+    // **************************************************************
 	
 }
