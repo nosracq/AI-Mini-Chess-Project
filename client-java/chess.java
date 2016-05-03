@@ -875,6 +875,7 @@ public class chess {
 	  int destRowIdx;
 	  char [] plyChars = new char[2];
 
+	  if (playCount < 41 && winner() == '?') {
 	  // add current state of the board to boardHist for undo functionality
 	  boardHist.push(boardGet());
 
@@ -927,6 +928,7 @@ public class chess {
 		board[6][3] = nextMove;
 		board[6][4] = '\n';
       }
+	  }
 	}
     public static int colIndex(char col) {
 	  int idx = 0;
@@ -1011,19 +1013,22 @@ public class chess {
     // **************************************************************
 
 
-
 	// perform a random move and return it - one example output is given below - 
 	// note that you can call the chess.movesShuffled() function as well as the chess.move() function in here	
 	public static String moveRandom() {
-		
-	  return movesShuffled().firstElement();
+	  Vector<String> moves = movesShuffled();
+	  String randmove = moves.get(0);
+	  move(randmove);		
+	  return randmove;
 	}
 
 	// perform a greedy move and return it - one example output is given below - 
     // note that you can call the chess.movesEvaluated() function as well as the chess.move() function in here
 	public static String moveGreedy() {
-		
-		return "a2-a3\n";
+	  Vector<String> moves = movesEvaluated();
+	  String greedymove = moves.get(0);
+	  move(greedymove);		
+	  return greedymove;
 	}
 
 
