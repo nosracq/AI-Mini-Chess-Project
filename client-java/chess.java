@@ -2,10 +2,15 @@ import java.util.Vector;
 import java.util.Stack;
 import java.util.Collections;
 import java.util.Arrays;
+import java.lang.Math;
 import java.io.*;
 
 public class chess {
     // Global variables for game state
+	//static double posInfinity = Double.POSITIVE_INFINITY;
+	//static double negInfinity = Double.NEGATIVE_INFINITY;
+    static int posInfinity = 1000000000;
+    static int negInfinity = -1000000000;
     static int playCount;
     static char nextMove;
     static char [][] board = new char[7][6];
@@ -1037,10 +1042,42 @@ public class chess {
     // **************************************************************
 
 
+    public static int negaMax(int depth) {
+	  // reched the end
+	  if (depth == 0 || (winner() != '?')) return eval();
+
+	  int score =  negInfinity;
+
+	  // moves() returns a vector of strings
+	  for (String m: moves()) {
+		move(m);
+		score = Math.max(score, -negaMax(depth - 1));
+		undo();
+      }
+	  return score;
+    }
 	// perform a negamax move and return it - one example output is given below - note that you can call the the other functions in here
-	public static String moveNegamax(int intDepth, int intDuration) {
+	public static String moveNegamax(int depth, int duration) {
+
+	  String bestMove = new String();
+	  int score =  negInfinity;
+	  int temp = 0;
+
+	  for (String m: moves()) {
+		//perform the move
+		move(m);
 		
-		return "a2-a3\n";
+		temp = -negaMax(depth-1);
+		// undo move
+		undo();
+
+		if (temp > score) {
+		  bestMove = m;
+		  score = temp;
+        }
+      }
+	  move(bestMove);
+	  return bestMove;
 	}
 
 
