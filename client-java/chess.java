@@ -1085,11 +1085,41 @@ public class chess {
     // *********************** END OF HOMEOWORK 5 *******************
     // **************************************************************
 
+    public static int alphabeta(int depth, int alpha, int beta) {
+	  if ((depth == 0) || (winner() != '?')) return eval();
 
+	  int score = negInfinity;
+
+	  for (String m: moves()) {
+		move(m);
+		score = Math.max(score, -alphabeta(depth - 1, -beta, -alpha));
+		undo();
+
+		alpha = Math.max(alpha, score);
+
+		if (alpha >= beta) break;
+      } 
+	  return score;
+    }
 	// perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here		
-	public static String moveAlphabeta(int intDepth, int intDuration) {
+	public static String moveAlphabeta(int depth, int duration) {
+	  String bestMove = new String();
+	  int alpha = negInfinity;
+	  int beta = posInfinity;
+	  int temp = 0;
+
+	  for (String m: moves()) {
+		move(m);
+		temp = -alphabeta(depth - 1, -beta, -alpha);
+		undo();
+
+		if (temp > alpha) {
+		  bestMove = m;
+		  alpha = temp;
+        }
+      }
 		
-		return "a2-a3\n";
+	  return bestMove;
 	}
 
 
