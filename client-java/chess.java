@@ -7,8 +7,9 @@ import java.io.*;
 
 public class chess {
     // Global variables for game state
-	//static double posInfinity = Double.POSITIVE_INFINITY;
-	//static double negInfinity = Double.NEGATIVE_INFINITY;
+    static long timeLimit;
+    static int timeCounter;
+    static long timeCache;
     static int posInfinity = 1000000000;
     static int negInfinity = -1000000000;
     static int playCount;
@@ -1086,6 +1087,16 @@ public class chess {
     // **************************************************************
 
     public static int alphabeta(int depth, int alpha, int beta) {
+	  timeCounter += 1;
+
+	  if (timeCounter > 1000) {
+		timeCounter = 0;
+		timeCache = System.currentTimeMillis();
+      }
+
+	  if (timeCache > timeLimit) return 0;
+
+
 	  if ((depth == 0) || (winner() != '?')) return eval();
 
 	  int score = negInfinity;
@@ -1103,22 +1114,38 @@ public class chess {
     }
 	// perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here		
 	public static String moveAlphabeta(int depth, int duration) {
+	  long startTime = System.currentTimeMillis();
+	  long endTime;
+	  timeLimit = (depth < 0 && duration < 7490) ? System.currentTimeMillis() + duration : System.currentTimeMillis() + 7490;
 	  String bestMove = new String();
 	  int alpha = negInfinity;
 	  int beta = posInfinity;
 	  int temp = 0;
 
-	  for (String m: moves()) {
-		move(m);
-		temp = -alphabeta(depth - 1, -beta, -alpha);
-		undo();
+	  // iterative deepening
+	  for (int i = 1; i < 100; i++) {
+	    // Get a score for each possible move
+	    for (String m: moves()) {
+		  move(m);
+	   // temp = -alphabeta(depth - 1, -beta, -alpha);
+		  System.out.println("Getting score for " + m + " at depth " + i);
+		  temp = -alphabeta(i, -beta, -alpha);
+		  undo();
 
-		if (temp > alpha) {
-		  bestMove = m;
-		  alpha = temp;
+		  if (temp > alpha) {
+		    bestMove = m;
+		    alpha = temp;
+          }
         }
-      }
-		
+		if (System.currentTimeMillis() >= timeLimit) {
+		  System.out.println("Breakin out of iterative deepening: Start Time: " + timeLimit + " Time Limit: " + timeLimit + "Current Time: " +
+							 System.currentTimeMillis());
+		  break;
+		}
+	  }
+	  move(bestMove);		
+	  endTime = System.currentTimeMillis();
+	  System.out.println("Elapsed Time: " + (endTime - startTime));
 	  return bestMove;
 	}
 
